@@ -1,13 +1,147 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
+
+enum Role {
+  CUSTOMER
+  PROVIDER
+  ADMIN
+}
+
+enum OrderStatus {
+  PLACED
+  PREPARING
+  READY
+  DELIVERED
+  CANCELLED
+}
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+  role     Role
+  status   String @default("ACTIVE")
+
+  meals Meal[]
+
+  orders          Order[]
+  reviews         Review[]
+  wishlists       Wishlist[]
+  providerProfile ProviderProfile?
+}
+
+model ProviderProfile {
+  id      String  @id @default(uuid())
+  bio     String?
+  address String?
+  phone   String?
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Category {
+  id   String @id @default(uuid())
+  name String @unique
+
+  meals Meal[]
+}
+
+model Meal {
+  id          String @id @default(uuid())
+  name        String
+  price       Float
+  description String
+  image       String
+
+  providerId String
+  categoryId String
+
+  provider   User        @relation(fields: [providerId], references: [id])
+  category   Category    @relation(fields: [categoryId], references: [id])
+  reviews    Review[]
+  orderItems OrderItem[]
+  wishlists  Wishlist[]
+}
+
+model Order {
+  id         String      @id @default(uuid())
+  status     OrderStatus @default(PLACED)
+  address    String
+  totalPrice Float       @default(0)
+  createdAt  DateTime    @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  items OrderItem[]
+}
+
+model OrderItem {
+  id       String @id @default(uuid())
+  quantity Int
+  price    Float
+
+  orderId String
+  mealId  String
+
+  order Order @relation(fields: [orderId], references: [id])
+  meal  Meal  @relation(fields: [mealId], references: [id])
+}
+
+model Review {
+  id      String @id @default(uuid())
+  rating  Int
+  comment String
+
+  userId String
+  mealId String
+
+  user User @relation(fields: [userId], references: [id])
+  meal Meal @relation(fields: [mealId], references: [id])
+}
+
+model FoodImage {
+  id          String   @id @default(uuid())
+  url         String
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+}
+
+model Wishlist {
+  id        String   @id @default(uuid())
+  userId    String
+  mealId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meal Meal @relation(fields: [mealId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, mealId])
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+model Coupon {
+  id           String       @id @default(uuid())
+  code         String       @unique
+  discountType DiscountType
+  value        Float
+  isActive     Boolean      @default(true)
+  expiry       DateTime?
+  createdAt    DateTime     @default(now())
+}
+
+
+
