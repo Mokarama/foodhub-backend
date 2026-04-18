@@ -1,0 +1,52 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    // File Layout
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    // Environment Settings
+    // See also https://aka.ms/tsconfig/module
+
+
+    "module": "commonjs",
+    "target": "ES2020",
+
+    "types": [],
+
+    // For nodejs:
+    "lib": ["ES2020"],
+    // "types": ["node"],
+    // npm install -D @types/node
+
+    // Other Outputs
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    // Added from your config
+    "resolveJsonModule": true,
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    "strict": true,
+
+
+    "jsx": "react-jsx",
+    // "verbatimModuleSyntax": true,
+
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+
+    // From your config
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  },
+
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
