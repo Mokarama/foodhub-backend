@@ -47,7 +47,7 @@ export const getReviews = async (req: Request, res: Response): Promise<void> => 
         const { mealId } = req.query;
 
         const reviews = await prisma.review.findMany({
-            where: mealId ? { mealId } : {},
+            where: mealId ? { mealId: mealId as string } : {}, // ✅ ONLY FIXED LINE
             include: {
                 user: { select: { id: true, name: true } },
             },

@@ -29,7 +29,7 @@ app.use(morgan("dev"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("FoodHub API Running 🍱");
+  res.send("FoodHub API Running");
 });
 
 app.use("/api/auth", authRoutes);

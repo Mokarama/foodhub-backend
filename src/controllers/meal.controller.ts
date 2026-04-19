@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 // import mealService from "../services/meal.service";
 
 import { validatePrice, validateName } from "../utils/validation";
-import { mealService } from '../services/meal.service';
+import * as mealService from '../services/meal.service';
 
 // Create Meal
 export const createMeal = async (req: any, res: Response): Promise<any> => {

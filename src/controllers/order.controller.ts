@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import orderService from "../services/order.service";
+import * as orderService from "../services/order.service";
 import { validateAddress, validateOrderStatus, validateQuantity } from "../utils/validation";
 
 // Create Order
