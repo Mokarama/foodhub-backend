@@ -1,6 +1,8 @@
-const prisma = require("../utils/prisma-client");
+import { Request, Response } from "express";
+// import prisma from "../utils/prisma-client.ts";
+import prisma from "../utils/prisma-client";
 
-exports.validateCoupon = async (req, res) => {
+export const validateCoupon = async (req: Request, res: Response): Promise<any> => {
     try {
         const { code } = req.body;
         if (!code) {
@@ -34,7 +36,7 @@ exports.validateCoupon = async (req, res) => {
     }
 };
 
-exports.createCoupon = async (req, res) => {
+export const createCoupon = async (req: Request, res: Response): Promise<any> => {
     try {
         const { code, discountType, value } = req.body;
         const coupon = await prisma.coupon.create({

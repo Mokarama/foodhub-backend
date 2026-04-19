@@ -1,6 +1,7 @@
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import { Request } from "express";
 
 // Ensure upload directory exists
 const uploadDir = path.join(__dirname, "../public/uploads/foods");
@@ -9,17 +10,17 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function (req: Request, file: Express.Multer.File, cb: any) {
         cb(null, uploadDir);
     },
-    filename: function (req, file, cb) {
+    filename: function (req: Request, file: Express.Multer.File, cb: any) {
         // Unique filename: fieldname-timestamp-random.ext
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
         cb(null, 'food-' + uniqueSuffix + path.extname(file.originalname));
     }
 });
 
-const fileFilter = (req, file, cb) => {
+const fileFilter = (req: Request, file: Express.Multer.File, cb: any) => {
     const allowedTypes = /jpeg|jpg|png|webp/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);
@@ -37,4 +38,4 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-module.exports = upload;
+export default upload;

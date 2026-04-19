@@ -1,6 +1,7 @@
-const jwt = require("jsonwebtoken");
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
 
-module.exports = (req, res, next) => {
+const authMiddleware = (req: any, res: Response, next: NextFunction): any => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -10,7 +11,7 @@ module.exports = (req, res, next) => {
 
     const token = authHeader.split(" ")[1];
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
 
     req.user = decoded; // { userId, role }
 
@@ -19,3 +20,5 @@ module.exports = (req, res, next) => {
     res.status(401).json({ message: "Unauthorized" });
   }
 };
+
+export default authMiddleware;

@@ -1,11 +1,11 @@
-const prisma = require("../utils/prisma-client");
+import prisma from "../utils/prisma-client";
 
 // Create Order
-exports.createOrder = async (userId, data) => {
+export const createOrder = async (userId: any, data: any): Promise<any> => {
     const { items, address, couponCode } = data;
 
     // Fetch all meals to validate and calculate price
-    const mealIds = items.map((i) => i.mealId);
+    const mealIds = items.map((i: any) => i.mealId);
     const meals = await prisma.meal.findMany({
         where: { id: { in: mealIds } },
     });
@@ -15,11 +15,11 @@ exports.createOrder = async (userId, data) => {
     }
 
     // Build a price lookup map
-    const priceMap = {};
-    meals.forEach((m) => (priceMap[m.id] = m.price));
+    const priceMap: any = {};
+    meals.forEach((m: any) => (priceMap[m.id] = m.price));
 
     // Calculate base total price
-    let subtotal = items.reduce((sum, item) => {
+    let subtotal = items.reduce((sum: number, item: any) => {
         return sum + priceMap[item.mealId] * item.quantity;
     }, 0);
 
@@ -48,7 +48,7 @@ exports.createOrder = async (userId, data) => {
             address,
             totalPrice: finalTotal,
             items: {
-                create: items.map((item) => ({
+                create: items.map((item: any) => ({
                     mealId: item.mealId,
                     quantity: item.quantity,
                     price: priceMap[item.mealId],
@@ -64,7 +64,7 @@ exports.createOrder = async (userId, data) => {
 };
 
 // Get Orders (Customer — their own orders)
-exports.getOrders = async (userId) => {
+export const getOrders = async (userId: any): Promise<any> => {
     return await prisma.order.findMany({
         where: { userId },
         include: {
@@ -77,7 +77,7 @@ exports.getOrders = async (userId) => {
 };
 
 // Get All Orders (Admin)
-exports.getAllOrders = async () => {
+export const getAllOrders = async (): Promise<any> => {
     return await prisma.order.findMany({
         include: {
             user: { select: { id: true, name: true, email: true } },
@@ -90,7 +90,7 @@ exports.getAllOrders = async () => {
 };
 
 // Get Single Order
-exports.getOrderById = async (id) => {
+export const getOrderById = async (id: any): Promise<any> => {
     const order = await prisma.order.findUnique({
         where: { id },
         include: {
@@ -109,7 +109,7 @@ exports.getOrderById = async (id) => {
 };
 
 // Update Status (Provider / Admin)
-exports.updateOrderStatus = async (id, status) => {
+export const updateOrderStatus = async (id: any, status: any): Promise<any> => {
     return await prisma.order.update({
         where: { id },
         data: { status },

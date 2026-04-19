@@ -1,7 +1,7 @@
-const prisma = require("../utils/prisma-client");
+import prisma from "../utils/prisma-client";
 
 // Create
-exports.createMeal = async (userId, data) => {
+export const createMeal = async (userId: any, data: any): Promise<any> => {
     return await prisma.meal.create({
         data: {
             name: data.name,
@@ -15,8 +15,8 @@ exports.createMeal = async (userId, data) => {
 };
 
 // Get All (with optional filters: categoryId, minPrice, maxPrice)
-exports.getMeals = async (filters = {}) => {
-    const where = {};
+export const getMeals = async (filters: any = {}): Promise<any> => {
+    const where: any = {};
 
     if (filters.categoryId) {
         where.categoryId = filters.categoryId;
@@ -40,7 +40,7 @@ exports.getMeals = async (filters = {}) => {
 };
 
 // Get Single
-exports.getMealById = async (id) => {
+export const getMealById = async (id: any): Promise<any> => {
     const meal = await prisma.meal.findUnique({
         where: { id },
         include: {
@@ -64,7 +64,7 @@ exports.getMealById = async (id) => {
 };
 
 // Update
-exports.updateMeal = async (id, data) => {
+export const updateMeal = async (id: any, data: any): Promise<any> => {
     return await prisma.meal.update({
         where: { id },
         data,
@@ -72,7 +72,7 @@ exports.updateMeal = async (id, data) => {
 };
 
 // Delete
-exports.deleteMeal = async (id) => {
+export const deleteMeal = async (id: any): Promise<any> => {
     return await prisma.meal.delete({
         where: { id },
     });

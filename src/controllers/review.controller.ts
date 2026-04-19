@@ -1,8 +1,9 @@
-const prisma = require("../utils/prisma-client");
-const { validateRating } = require("../utils/validation");
+import { Request, Response } from "express";
+import prisma from "../utils/prisma-client";
+import { validateRating } from "../utils/validation";
 
 // Create Review
-exports.createReview = async (req, res) => {
+export const createReview = async (req: any, res: Response): Promise<any> => {
     try {
         const { mealId, rating, comment } = req.body;
 
@@ -34,14 +35,14 @@ exports.createReview = async (req, res) => {
         });
 
         res.status(201).json(review);
-    } catch (err) {
+    } catch (err: any) {
         console.error("Create review error:", err);
         res.status(500).json({ message: err.message });
     }
 };
 
 // Get Reviews for a Meal (?mealId=X)
-exports.getReviews = async (req, res) => {
+export const getReviews = async (req: Request, res: Response): Promise<void> => {
     try {
         const { mealId } = req.query;
 
@@ -54,7 +55,7 @@ exports.getReviews = async (req, res) => {
         });
 
         res.json(reviews);
-    } catch (err) {
+    } catch (err: any) {
         console.error("Get reviews error:", err);
         res.status(500).json({ message: err.message });
     }

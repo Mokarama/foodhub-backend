@@ -1,5 +1,7 @@
-module.exports = (...roles) => {
-  return (req, res, next) => {
+import { Request, Response, NextFunction } from "express";
+
+const roleMiddleware = (...roles: string[]) => {
+  return (req: any, res: Response, next: NextFunction): any => {
     try {
       if (!roles.includes(req.user.role)) {
         return res.status(403).json({
@@ -8,8 +10,10 @@ module.exports = (...roles) => {
       }
 
       next();
-    } catch (err) {
+    } catch (err: any) {
       res.status(500).json({ message: err.message });
     }
   };
 };
+
+export default roleMiddleware;

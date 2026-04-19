@@ -1,17 +1,17 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
 
-const {
+import {
   createMeal,
   getMeals,
   getSingleMeal,
   updateMeal,
   deleteMeal,
-} = require("../controllers/meal.controller");
+} from "../controllers/meal.controller";
 
-const auth = require("../middleware/auth.middleware");
-const role = require("../middleware/role.middleware");
-const upload = require("../utils/multer.config");
+import auth from "../middleware/auth.middleware";
+import role from "../middleware/role.middleware";
+import upload from "../utils/multer.config";
 
 // Public
 router.get("/", getMeals);
@@ -22,4 +22,4 @@ router.post("/", auth, role("PROVIDER"), upload.single('image'), createMeal);
 router.put("/:id", auth, role("PROVIDER"), upload.single('image'), updateMeal);
 router.delete("/:id", auth, role("PROVIDER", "ADMIN"), deleteMeal);
 
-module.exports = router;
+export default router;

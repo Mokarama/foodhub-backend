@@ -1,55 +1,43 @@
 // Backend validation utility functions
 
-const validateEmail = (email) => {
+export const validateEmail = (email: any): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 };
 
-const validatePassword = (password) => {
+export const validatePassword = (password: any): boolean => {
     return password && password.length >= 6;
 };
 
-const validateName = (name) => {
+export const validateName = (name: any): boolean => {
     return name && name.trim().length >= 2;
 };
 
-const validatePrice = (price) => {
+export const validatePrice = (price: any): boolean => {
     const num = parseFloat(price);
     return !isNaN(num) && num > 0;
 };
 
-const validateRating = (rating) => {
+export const validateRating = (rating: any): boolean => {
     const num = parseInt(rating);
     return num >= 1 && num <= 5;
 };
 
-const validateQuantity = (quantity) => {
+export const validateQuantity = (quantity: any): boolean => {
     const num = parseInt(quantity);
     return !isNaN(num) && num > 0;
 };
 
-const validateAddress = (address) => {
+export const validateAddress = (address: any): boolean => {
     return address && address.trim().length >= 5;
 };
 
-const validateOrderStatus = (status) => {
+export const validateOrderStatus = (status: any): boolean => {
     const validStatuses = ["PLACED", "PREPARING", "READY", "DELIVERED", "CANCELLED"];
     return validStatuses.includes(status);
 };
 
-const validateRole = (role) => {
+export const validateRole = (role: any): boolean => {
     const validRoles = ["CUSTOMER", "PROVIDER", "ADMIN"];
     return validRoles.includes(role);
-};
-
-module.exports = {
-    validateEmail,
-    validatePassword,
-    validateName,
-    validatePrice,
-    validateRating,
-    validateQuantity,
-    validateAddress,
-    validateOrderStatus,
-    validateRole,
 };

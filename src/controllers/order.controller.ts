@@ -1,8 +1,9 @@
-const orderService = require("../services/order.service");
-const { validateAddress, validateOrderStatus, validateQuantity } = require("../utils/validation");
+import { Request, Response } from "express";
+import orderService from "../services/order.service";
+import { validateAddress, validateOrderStatus, validateQuantity } from "../utils/validation";
 
 // Create Order
-exports.createOrder = async (req, res) => {
+export const createOrder = async (req: any, res: Response): Promise<any> => {
   try {
     const { items, address } = req.body;
 
@@ -28,40 +29,40 @@ exports.createOrder = async (req, res) => {
 
     const order = await orderService.createOrder(req.user.userId, req.body);
     res.status(201).json(order);
-  } catch (err) {
+  } catch (err: any) {
     console.error("Create order error:", err);
     res.status(500).json({ message: err.message });
   }
 };
 
 // Get Customer Orders
-exports.getOrders = async (req, res) => {
+export const getOrders = async (req: any, res: Response): Promise<void> => {
   try {
     const orders = await orderService.getOrders(req.user.userId);
     res.json(orders);
-  } catch (err) {
+  } catch (err: any) {
     console.error("Get orders error:", err);
     res.status(500).json({ message: err.message });
   }
 };
 
 // Get All Orders (Admin)
-exports.getAllOrders = async (req, res) => {
+export const getAllOrders = async (req: Request, res: Response): Promise<void> => {
   try {
     const orders = await orderService.getAllOrders();
     res.json(orders);
-  } catch (err) {
+  } catch (err: any) {
     console.error("Get all orders error:", err);
     res.status(500).json({ message: err.message });
   }
 };
 
 // Get Single Order
-exports.getOrderById = async (req, res) => {
+export const getOrderById = async (req: Request, res: Response): Promise<void> => {
   try {
     const order = await orderService.getOrderById(req.params.id);
     res.json(order);
-  } catch (err) {
+  } catch (err: any) {
     const status = err.message === "Order not found" ? 404 : 500;
     console.error("Get order error:", err);
     res.status(status).json({ message: err.message });
@@ -69,7 +70,7 @@ exports.getOrderById = async (req, res) => {
 };
 
 // Update Status
-exports.updateOrderStatus = async (req, res) => {
+export const updateOrderStatus = async (req: Request, res: Response): Promise<any> => {
   try {
     const { status } = req.body;
 
@@ -83,7 +84,7 @@ exports.updateOrderStatus = async (req, res) => {
 
     const order = await orderService.updateOrderStatus(req.params.id, status);
     res.json(order);
-  } catch (err) {
+  } catch (err: any) {
     console.error("Update order status error:", err);
     res.status(500).json({ message: err.message });
   }
