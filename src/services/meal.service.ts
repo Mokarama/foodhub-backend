@@ -81,5 +81,3 @@ export const deleteMeal = async (id: any): Promise<any> => {
     });
 };
 
-//
-//
