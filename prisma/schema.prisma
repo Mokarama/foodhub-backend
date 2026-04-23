@@ -7,34 +7,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  CUSTOMER
-  PROVIDER
-  ADMIN
-}
-
-enum OrderStatus {
-  PLACED
-  PREPARING
-  READY
-  DELIVERED
-  CANCELLED
-}
-
 model User {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  password String
-  role     Role
-  status   String @default("ACTIVE")
-
-  meals Meal[]
-
+  id              String           @id @default(uuid())
+  name            String
+  email           String           @unique
+  password        String
+  role            Role
+  status          String           @default("ACTIVE")
+  meals           Meal[]
   orders          Order[]
+  providerProfile ProviderProfile?
   reviews         Review[]
   wishlists       Wishlist[]
-  providerProfile ProviderProfile?
 }
 
 model ProviderProfile {
@@ -42,33 +26,29 @@ model ProviderProfile {
   bio     String?
   address String?
   phone   String?
-
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id])
+  userId  String  @unique
+  user    User    @relation(fields: [userId], references: [id])
 }
 
 model Category {
-  id   String @id @default(uuid())
-  name String @unique
-
+  id    String @id @default(uuid())
+  name  String @unique
   meals Meal[]
 }
 
 model Meal {
-  id          String @id @default(uuid())
+  id          String      @id @default(uuid())
   name        String
   price       Float
   description String
   image       String
-
-  providerId String
-  categoryId String
-
-  provider   User        @relation(fields: [providerId], references: [id])
-  category   Category    @relation(fields: [categoryId], references: [id])
-  reviews    Review[]
-  orderItems OrderItem[]
-  wishlists  Wishlist[]
+  providerId  String
+  categoryId  String
+  category    Category    @relation(fields: [categoryId], references: [id])
+  provider    User        @relation(fields: [providerId], references: [id])
+  orderItems  OrderItem[]
+  reviews     Review[]
+  wishlists   Wishlist[]
 }
 
 model Order {
@@ -77,35 +57,29 @@ model Order {
   address    String
   totalPrice Float       @default(0)
   createdAt  DateTime    @default(now())
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  items OrderItem[]
+  userId     String
+  user       User        @relation(fields: [userId], references: [id])
+  items      OrderItem[]
 }
 
 model OrderItem {
   id       String @id @default(uuid())
   quantity Int
   price    Float
-
-  orderId String
-  mealId  String
-
-  order Order @relation(fields: [orderId], references: [id])
-  meal  Meal  @relation(fields: [mealId], references: [id])
+  orderId  String
+  mealId   String
+  meal     Meal   @relation(fields: [mealId], references: [id])
+  order    Order  @relation(fields: [orderId], references: [id])
 }
 
 model Review {
   id      String @id @default(uuid())
   rating  Int
   comment String
-
-  userId String
-  mealId String
-
-  user User @relation(fields: [userId], references: [id])
-  meal Meal @relation(fields: [mealId], references: [id])
+  userId  String
+  mealId  String
+  meal    Meal   @relation(fields: [mealId], references: [id])
+  user    User   @relation(fields: [userId], references: [id])
 }
 
 model FoodImage {
@@ -121,16 +95,10 @@ model Wishlist {
   userId    String
   mealId    String
   createdAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  meal Meal @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  meal      Meal     @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, mealId])
-}
-
-enum DiscountType {
-  PERCENTAGE
-  FIXED
 }
 
 model Coupon {
@@ -143,5 +111,21 @@ model Coupon {
   createdAt    DateTime     @default(now())
 }
 
+enum Role {
+  CUSTOMER
+  PROVIDER
+  ADMIN
+}
 
+enum OrderStatus {
+  PLACED
+  PREPARING
+  READY
+  DELIVERED
+  CANCELLED
+}
 
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}

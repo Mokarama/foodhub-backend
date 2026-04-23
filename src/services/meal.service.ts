@@ -5,7 +5,7 @@ export const createMeal = async (userId: any, data: any): Promise<any> => {
     return await prisma.meal.create({
         data: {
             name: data.name,
-            price: data.price,
+            price: parseFloat(data.price),
             description: data.description,
             image: data.image,
             providerId: userId,
@@ -65,6 +65,9 @@ export const getMealById = async (id: any): Promise<any> => {
 
 // Update
 export const updateMeal = async (id: any, data: any): Promise<any> => {
+    if (data.price) {
+        data.price = parseFloat(data.price);
+    }
     return await prisma.meal.update({
         where: { id },
         data,

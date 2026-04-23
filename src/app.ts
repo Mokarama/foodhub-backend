@@ -16,8 +16,10 @@ import couponRoutes from "./routes/coupon.routes";
 const app = express();
 
 // CORS Configuration
+const origins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(",") : ["http://localhost:3000"];
+
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+  origin: origins,
   credentials: true,
 };
 

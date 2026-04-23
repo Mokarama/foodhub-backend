@@ -3,6 +3,6 @@ const router = express.Router();
 
 import { getAllFoodImages } from "../controllers/foodImage.controller";
 
-router.get("/images", getAllFoodImages);
+router.get("/", getAllFoodImages);
 
 export default router;

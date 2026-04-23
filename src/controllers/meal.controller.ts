@@ -27,7 +27,7 @@ export const createMeal = async (req: any, res: Response): Promise<any> => {
       return res.status(400).json({ message: "Price must be a positive number" });
     }
 
-    const payload = { ...req.body, image };
+    const payload = { ...req.body, image, price: parseFloat(price) };
     const meal = await mealService.createMeal(req.user.userId, payload);
     res.status(201).json(meal);
   } catch (err: any) {
@@ -74,7 +74,11 @@ export const updateMeal = async (req: Request, res: Response): Promise<any> => {
       return res.status(400).json({ message: "Price must be a positive number" });
     }
 
-    const meal = await mealService.updateMeal(req.params.id, req.body);
+    const payload = { ...req.body };
+    if (payload.price !== undefined) {
+      payload.price = parseFloat(payload.price);
+    }
+    const meal = await mealService.updateMeal(req.params.id, payload);
     res.json(meal);
   } catch (err: any) {
     console.error("Update meal error:", err);
