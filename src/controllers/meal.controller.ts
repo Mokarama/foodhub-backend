@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 
 import { validatePrice, validateName } from "../utils/validation";
 import * as mealService from '../services/meal.service';
+import { uploadBufferToCloudinary } from "../utils/cloudinary";
 
 // Create Meal
 export const createMeal = async (req: any, res: Response): Promise<any> => {
@@ -11,7 +12,8 @@ export const createMeal = async (req: any, res: Response): Promise<any> => {
     let image = req.body.image;
 
     if (req.file) {
-      image = `/uploads/foods/${req.file.filename}`;
+      const uploadResult = await uploadBufferToCloudinary(req.file.buffer);
+      image = uploadResult.secure_url;
     }
 
     // Validation
@@ -63,7 +65,13 @@ export const getSingleMeal = async (req: Request, res: Response): Promise<void> 
 // Update Meal
 export const updateMeal = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { name, price, description, image, categoryId } = req.body;
+    const { name, price, description, categoryId } = req.body;
+    let image = req.body.image;
+
+    if ((req as any).file) {
+      const uploadResult = await uploadBufferToCloudinary((req as any).file.buffer);
+      image = uploadResult.secure_url;
+    }
 
     // Validation
     if (name && !validateName(name)) {
@@ -75,6 +83,9 @@ export const updateMeal = async (req: Request, res: Response): Promise<any> => {
     }
 
     const payload = { ...req.body };
+    if (image) {
+      payload.image = image;
+    }
     if (payload.price !== undefined) {
       payload.price = parseFloat(payload.price);
     }

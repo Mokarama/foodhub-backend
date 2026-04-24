@@ -37,13 +37,15 @@ exports.deleteMeal = exports.updateMeal = exports.getSingleMeal = exports.getMea
 // import mealService from "../services/meal.service";
 const validation_1 = require("../utils/validation");
 const mealService = __importStar(require("../services/meal.service"));
+const cloudinary_1 = require("../utils/cloudinary");
 // Create Meal
 const createMeal = async (req, res) => {
     try {
         const { name, price, description, categoryId } = req.body;
         let image = req.body.image;
         if (req.file) {
-            image = `/uploads/foods/${req.file.filename}`;
+            const uploadResult = await (0, cloudinary_1.uploadBufferToCloudinary)(req.file.buffer);
+            image = uploadResult.secure_url;
         }
         // Validation
         if (!name || !price || !description || !image || !categoryId) {
@@ -94,7 +96,12 @@ exports.getSingleMeal = getSingleMeal;
 // Update Meal
 const updateMeal = async (req, res) => {
     try {
-        const { name, price, description, image, categoryId } = req.body;
+        const { name, price, description, categoryId } = req.body;
+        let image = req.body.image;
+        if (req.file) {
+            const uploadResult = await (0, cloudinary_1.uploadBufferToCloudinary)(req.file.buffer);
+            image = uploadResult.secure_url;
+        }
         // Validation
         if (name && !(0, validation_1.validateName)(name)) {
             return res.status(400).json({ message: "Meal name must be at least 2 characters" });
@@ -103,6 +110,9 @@ const updateMeal = async (req, res) => {
             return res.status(400).json({ message: "Price must be a positive number" });
         }
         const payload = { ...req.body };
+        if (image) {
+            payload.image = image;
+        }
         if (payload.price !== undefined) {
             payload.price = parseFloat(payload.price);
         }
