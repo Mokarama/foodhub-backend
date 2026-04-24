@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateOrderStatus = exports.getOrderById = exports.getAllOrders = exports.getOrders = exports.createOrder = void 0;
+exports.updateOrderStatus = exports.getProviderOrders = exports.getOrderById = exports.getAllOrders = exports.getOrders = exports.createOrder = void 0;
 const prisma_client_1 = __importDefault(require("../utils/prisma-client"));
 // Create Order
 const createOrder = async (userId, data) => {
@@ -99,12 +99,29 @@ const getOrderById = async (id) => {
             },
         },
     });
-    if (!order) {
-        throw new Error("Order not found");
-    }
     return order;
 };
 exports.getOrderById = getOrderById;
+// Get Orders for Provider
+const getProviderOrders = async (providerId) => {
+    return await prisma_client_1.default.order.findMany({
+        where: {
+            items: {
+                some: {
+                    meal: { providerId }
+                }
+            }
+        },
+        include: {
+            user: { select: { id: true, name: true, email: true } },
+            items: {
+                include: { meal: true },
+            },
+        },
+        orderBy: { createdAt: "desc" },
+    });
+};
+exports.getProviderOrders = getProviderOrders;
 // Update Status (Provider / Admin)
 const updateOrderStatus = async (id, status) => {
     return await prisma_client_1.default.order.update({

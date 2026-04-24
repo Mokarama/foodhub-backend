@@ -101,11 +101,27 @@ export const getOrderById = async (id: any): Promise<any> => {
         },
     });
 
-    if (!order) {
-        throw new Error("Order not found");
-    }
-
     return order;
+};
+
+// Get Orders for Provider
+export const getProviderOrders = async (providerId: string): Promise<any> => {
+    return await prisma.order.findMany({
+        where: {
+            items: {
+                some: {
+                    meal: { providerId }
+                }
+            }
+        },
+        include: {
+            user: { select: { id: true, name: true, email: true } },
+            items: {
+                include: { meal: true },
+            },
+        },
+        orderBy: { createdAt: "desc" },
+    });
 };
 
 // Update Status (Provider / Admin)

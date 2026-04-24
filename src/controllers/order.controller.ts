@@ -52,7 +52,17 @@ export const getAllOrders = async (req: Request, res: Response): Promise<void> =
     const orders = await orderService.getAllOrders();
     res.json(orders);
   } catch (err: any) {
-    console.error("Get all orders error:", err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Get Provider Orders
+export const getProviderOrders = async (req: any, res: Response): Promise<void> => {
+  try {
+    const orders = await orderService.getProviderOrders(req.user.userId);
+    res.json(orders);
+  } catch (err: any) {
+    console.error("Get provider orders error:", err);
     res.status(500).json({ message: err.message });
   }
 };

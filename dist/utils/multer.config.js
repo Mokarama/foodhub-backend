@@ -7,7 +7,7 @@ const multer_1 = __importDefault(require("multer"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 // Ensure upload directory exists
-const uploadDir = path_1.default.join(__dirname, "../public/uploads/foods");
+const uploadDir = path_1.default.join(__dirname, "../../public/uploads/foods");
 if (!fs_1.default.existsSync(uploadDir)) {
     fs_1.default.mkdirSync(uploadDir, { recursive: true });
 }

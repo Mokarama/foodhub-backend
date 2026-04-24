@@ -11,6 +11,8 @@ const role_middleware_1 = __importDefault(require("../middleware/role.middleware
 // Customer: place and view their own orders
 router.post("/", auth_middleware_1.default, (0, role_middleware_1.default)("CUSTOMER"), order_controller_1.createOrder);
 router.get("/", auth_middleware_1.default, (0, role_middleware_1.default)("CUSTOMER"), order_controller_1.getOrders);
+// Provider: view orders for their meals
+router.get("/provider", auth_middleware_1.default, (0, role_middleware_1.default)("PROVIDER"), order_controller_1.getProviderOrders);
 // Any authenticated user: view single order
 router.get("/:id", auth_middleware_1.default, order_controller_1.getOrderById);
 // Provider or Admin: update order status

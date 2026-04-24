@@ -4,6 +4,7 @@ const router = express.Router();
 import {
   createOrder,
   getOrders,
+  getProviderOrders,
   getOrderById,
   updateOrderStatus,
 } from "../controllers/order.controller";
@@ -14,6 +15,9 @@ import role from "../middleware/role.middleware";
 // Customer: place and view their own orders
 router.post("/", auth, role("CUSTOMER"), createOrder);
 router.get("/", auth, role("CUSTOMER"), getOrders);
+
+// Provider: view orders for their meals
+router.get("/provider", auth, role("PROVIDER"), getProviderOrders);
 
 // Any authenticated user: view single order
 router.get("/:id", auth, getOrderById);

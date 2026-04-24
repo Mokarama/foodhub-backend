@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateOrderStatus = exports.getOrderById = exports.getAllOrders = exports.getOrders = exports.createOrder = void 0;
+exports.updateOrderStatus = exports.getOrderById = exports.getProviderOrders = exports.getAllOrders = exports.getOrders = exports.createOrder = void 0;
 const orderService = __importStar(require("../services/order.service"));
 const validation_1 = require("../utils/validation");
 // Create Order
@@ -84,11 +84,22 @@ const getAllOrders = async (req, res) => {
         res.json(orders);
     }
     catch (err) {
-        console.error("Get all orders error:", err);
         res.status(500).json({ message: err.message });
     }
 };
 exports.getAllOrders = getAllOrders;
+// Get Provider Orders
+const getProviderOrders = async (req, res) => {
+    try {
+        const orders = await orderService.getProviderOrders(req.user.userId);
+        res.json(orders);
+    }
+    catch (err) {
+        console.error("Get provider orders error:", err);
+        res.status(500).json({ message: err.message });
+    }
+};
+exports.getProviderOrders = getProviderOrders;
 // Get Single Order
 const getOrderById = async (req, res) => {
     try {
