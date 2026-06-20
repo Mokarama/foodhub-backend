@@ -40,7 +40,7 @@ export const getWishlist = async (req: any, res: Response): Promise<any> => {
         }
       }
     });
-    res.json(wishlist);
+    res.json({ data: wishlist });
   } catch (err: any) {
     console.error("Get wishlist error:", err);
     res.status(500).json({ message: "Failed to get wishlist" });

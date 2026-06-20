@@ -26,9 +26,11 @@ export const validateCoupon = async (req: Request, res: Response): Promise<any> 
         }
 
         return res.status(200).json({
-            message: "Coupon applied successfully",
-            discountType: coupon.discountType,
-            value: coupon.value
+            data: {
+              message: "Coupon applied successfully",
+              discountType: coupon.discountType,
+              value: coupon.value
+            }
         });
     } catch (error) {
         console.error("Coupon validation error:", error);

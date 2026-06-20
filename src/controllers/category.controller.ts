@@ -14,5 +14,5 @@ export const createCategory = async (req: Request, res: Response): Promise<void>
 
 export const getCategories = async (req: Request, res: Response): Promise<void> => {
     const categories = await prisma.category.findMany();
-    res.json(categories);
+    res.json({ data: categories });
 };

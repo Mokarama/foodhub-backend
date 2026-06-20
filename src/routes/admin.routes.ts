@@ -65,7 +65,7 @@ router.post("/categories", auth, role("ADMIN"), async (req: Request, res: Respon
   }
 });
 
-// Delete category
+
 router.delete("/categories/:id", auth, role("ADMIN"), async (req: Request, res: Response) => {
   try {
     await prisma.category.delete({

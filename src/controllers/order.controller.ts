@@ -39,7 +39,7 @@ export const createOrder = async (req: any, res: Response): Promise<any> => {
 export const getOrders = async (req: any, res: Response): Promise<void> => {
   try {
     const orders = await orderService.getOrders(req.user.userId);
-    res.json(orders);
+    res.json({ data: orders });
   } catch (err: any) {
     console.error("Get orders error:", err);
     res.status(500).json({ message: err.message });
@@ -50,7 +50,7 @@ export const getOrders = async (req: any, res: Response): Promise<void> => {
 export const getAllOrders = async (req: Request, res: Response): Promise<void> => {
   try {
     const orders = await orderService.getAllOrders();
-    res.json(orders);
+    res.json({ data: orders });
   } catch (err: any) {
     res.status(500).json({ message: err.message });
   }
@@ -60,7 +60,7 @@ export const getAllOrders = async (req: Request, res: Response): Promise<void> =
 export const getProviderOrders = async (req: any, res: Response): Promise<void> => {
   try {
     const orders = await orderService.getProviderOrders(req.user.userId);
-    res.json(orders);
+    res.json({ data: orders });
   } catch (err: any) {
     console.error("Get provider orders error:", err);
     res.status(500).json({ message: err.message });
@@ -71,7 +71,7 @@ export const getProviderOrders = async (req: any, res: Response): Promise<void> 
 export const getOrderById = async (req: Request, res: Response): Promise<void> => {
   try {
     const order = await orderService.getOrderById(req.params.id);
-    res.json(order);
+    res.json({ data: order });
   } catch (err: any) {
     const status = err.message === "Order not found" ? 404 : 500;
     console.error("Get order error:", err);

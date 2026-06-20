@@ -54,7 +54,7 @@ export const getReviews = async (req: Request, res: Response): Promise<void> => 
             orderBy: { id: "desc" },
         });
 
-        res.json(reviews);
+        res.json({ data: reviews });
     } catch (err: any) {
         console.error("Get reviews error:", err);
         res.status(500).json({ message: err.message });

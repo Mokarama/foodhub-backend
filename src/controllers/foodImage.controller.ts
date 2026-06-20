@@ -6,7 +6,7 @@ export const getAllFoodImages = async (req: Request, res: Response): Promise<voi
     const images = await prisma.foodImage.findMany({
       orderBy: { createdAt: 'desc' }
     });
-    res.json(images);
+    res.json({ data: images });
   } catch (err: any) {
     console.error("Get food images error:", err);
     res.status(500).json({ message: "Failed to fetch food images", error: err.message });

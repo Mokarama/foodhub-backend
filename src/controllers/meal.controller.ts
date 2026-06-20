@@ -43,7 +43,7 @@ export const getMeals = async (req: Request, res: Response): Promise<void> => {
   try {
     const { categoryId, minPrice, maxPrice } = req.query;
     const meals = await mealService.getMeals({ categoryId, minPrice, maxPrice });
-    res.json(meals);
+    res.json({ data: meals });
   } catch (err: any) {
     console.error("Get meals error:", err);
     res.status(500).json({ message: err.message });
@@ -54,7 +54,7 @@ export const getMeals = async (req: Request, res: Response): Promise<void> => {
 export const getSingleMeal = async (req: Request, res: Response): Promise<void> => {
   try {
     const meal = await mealService.getMealById(req.params.id);
-    res.json(meal);
+    res.json({ data: meal });
   } catch (err: any) {
     const status = err.message === "Meal not found" ? 404 : 500;
     console.error("Get single meal error:", err);
